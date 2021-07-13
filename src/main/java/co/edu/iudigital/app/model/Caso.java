@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -30,7 +31,7 @@ public class Caso implements Serializable{
 	
 	private Float altitud;
 	
-	private Byte visible;
+	private Boolean visible;
 	
 	private String descripcion;
 	
@@ -42,6 +43,10 @@ public class Caso implements Serializable{
 	@JoinColumn(name = "delitos_id")
 	private Delito delito;
 
+	@PrePersist
+	public void prePersist() {
+		fechaHora = LocalDateTime.now();
+	}
 	/**
 	 * @return the id
 	 */
@@ -115,14 +120,14 @@ public class Caso implements Serializable{
 	/**
 	 * @return the visible
 	 */
-	public Byte getVisible() {
+	public Boolean getVisible() {
 		return visible;
 	}
 
 	/**
 	 * @param visible the visible to set
 	 */
-	public void setVisible(Byte visible) {
+	public void setVisible(Boolean visible) {
 		this.visible = visible;
 	}
 

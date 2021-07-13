@@ -21,9 +21,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()//se parte desde rutas más específicas a mas generales
-			.antMatchers(HttpMethod.GET, "/delitos", "/uploads/img/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/delitos").permitAll()
 			.antMatchers(HttpMethod.POST, "/usuarios").permitAll()
-			.antMatchers(HttpMethod.GET, "/usuarios/upload").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/casos", "/casos/caso/**").permitAll()
+			.antMatchers(HttpMethod.POST, "/usuarios/upload").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/uploads/img/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.POST, "/delitos").hasRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/delitos/delito/**").hasRole("ADMIN")
 			//.antMatchers(HttpMethod.POST, "/employees").hasRole("ADMIN") or hasAnyRole
 			.anyRequest()
 			.authenticated()

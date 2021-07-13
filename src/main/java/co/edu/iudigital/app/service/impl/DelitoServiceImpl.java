@@ -24,13 +24,13 @@ public class DelitoServiceImpl implements IDelitoService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Delito> findAll() throws RestException{
-		List<Delito> usuarios = delitoRepository.findAll();
-		if(usuarios == null) {
+		List<Delito> delitos = delitoRepository.findAll();
+		if(delitos == null) {
 			throw new NotFoundException(ErrorDto.getErrorDto(HttpStatus.NOT_FOUND.getReasonPhrase(),
                     ConstUtil.MESSAGE_NOT_FOUND, HttpStatus.NOT_FOUND.value()));
 		}
 		//TODO: usuariosDto
-		return usuarios;
+		return delitos;
 	}
 
 	@Override

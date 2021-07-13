@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.iudigital.app.exception.BadRequestException;
 import co.edu.iudigital.app.exception.ErrorDto;
 import co.edu.iudigital.app.exception.InternalServerErrorException;
-import co.edu.iudigital.app.exception.NotFoundException;
 import co.edu.iudigital.app.exception.RestException;
-import co.edu.iudigital.app.model.Delito;
-import co.edu.iudigital.app.service.iface.IDelitoService;
+import co.edu.iudigital.app.model.Caso;
+import co.edu.iudigital.app.service.iface.ICasoService;
 import co.edu.iudigital.app.util.ConstUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,50 +31,40 @@ import io.swagger.annotations.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/delitos")
+@RequestMapping("/casos")
 @CrossOrigin(origins = "*", 
 	methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
-@Api(value = "/delitos", tags = {"Delitos"})
+@Api(value = "/casos", tags = {"Casos"})
 @SwaggerDefinition(tags = {
-		@Tag(name = "Delitos", description = "Gestion API Delitos")
+		@Tag(name = "Casos", description = "Gestion API Casos")
 })
 @Slf4j
-public class DelitoController {
+public class CasoController {
 	
-	private static final Logger log = LoggerFactory.getLogger(DelitoController.class);
+	private static final Logger log = LoggerFactory.getLogger(CasoController.class);
 	
 	@Autowired
-	private IDelitoService delitoService;
+	private ICasoService casoService;
 	
-	@ApiOperation(value = "Obtiene todos delitos",
-				response = Delito.class,
-				responseContainer = "List",
-				produces = "application/json",
-				httpMethod = "GET")
-	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
-	public List<Delito> index() throws RestException{
-		return delitoService.findAll();
-	}
-	
-	@ApiOperation(value = "Obtiene delito por id",
-			response = Delito.class,
+	@ApiOperation(value = "Obtiene todos casos",
+			response = Caso.class,
+			responseContainer = "List",
 			produces = "application/json",
 			httpMethod = "GET")
-	@GetMapping("/delito/{id}")
+	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public Delito show(@PathVariable Long id) throws RestException {
-		return delitoService.findById(id);
+	public List<Caso> index() throws RestException{
+		return casoService.findAll();
 	}
 	
-    @ApiOperation(value = "Realiza la creación de un delito",
+    @ApiOperation(value = "Realiza la creación de un caso",
             produces = "application/json",
             httpMethod = "POST")
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Delito create(@Valid @RequestBody Delito delito) throws RestException{
+    public Caso create(@Valid @RequestBody Caso caso) throws RestException{
         try {
-            return delitoService.save(delito);
+            return casoService.save(caso);
         }catch (BadRequestException ex){
             throw ex;
         }catch (Exception ex){
@@ -87,22 +74,4 @@ public class DelitoController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
-    
-	@ApiOperation(value = "Elimina delito por id",
-			response = Delito.class,
-			produces = "application/json",
-			httpMethod = "DELETE")
-	@DeleteMapping("/delito/{id}")
-	@ResponseStatus(code = HttpStatus.OK)
-	public void delete(@PathVariable Long id) throws RestException {
-		Delito delito = delitoService.findById(id);
-		if(delito == null) {
-			throw new NotFoundException(ErrorDto.getErrorDto(HttpStatus.NOT_FOUND.getReasonPhrase(),
-                    ConstUtil.MESSAGE_NOT_FOUND,
-                    HttpStatus.NOT_FOUND.value()));
-		}else {
-		   delitoService.delete(id);
-		}
-		
-	}
 }
