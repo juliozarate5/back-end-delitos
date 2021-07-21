@@ -2,13 +2,14 @@ package co.edu.iudigital.app.service.iface;
 
 import java.util.List;
 
+import co.edu.iudigital.app.dto.CasoDto;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Caso;
 
 public interface ICasoService {
 	
 	// consultar todos los casos
-	public List<Caso> findAll() throws RestException;
+	public List<CasoDto> findAll() throws RestException;
 	// crear un caso
 	public Caso save(Caso caso) throws RestException;
 	// inactivar caso

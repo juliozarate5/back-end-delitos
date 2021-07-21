@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.iudigital.app.dto.CasoDto;
 import co.edu.iudigital.app.exception.BadRequestException;
 import co.edu.iudigital.app.exception.ErrorDto;
 import co.edu.iudigital.app.exception.InternalServerErrorException;
@@ -51,7 +52,7 @@ public class CasoController {
 			httpMethod = "GET")
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<Caso> index() throws RestException{
+	public List<CasoDto> index() throws RestException{
 		return casoService.findAll();
 	}
 	

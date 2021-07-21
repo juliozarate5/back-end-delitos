@@ -1,10 +1,12 @@
 package co.edu.iudigital.app.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.iudigital.app.dto.CasoDto;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Caso;
 import co.edu.iudigital.app.repository.ICasoRepository;
@@ -17,8 +19,26 @@ public class CasoServiceImpl implements ICasoService{
 	private ICasoRepository casoRepository;
 	
 	@Override
-	public List<Caso> findAll() throws RestException {
-		return casoRepository.findAll();
+	public List<CasoDto> findAll() throws RestException {
+		List<Caso> casos =  casoRepository.findAll();
+		List<CasoDto> casosDto = new ArrayList<>();
+		for(Caso caso: casos) {
+			CasoDto casoDto = new CasoDto();
+			casoDto.setId(caso.getId());
+			casoDto.setFechaHora(caso.getFechaHora());
+			casoDto.setLatitud(caso.getLatitud());
+			casoDto.setLongitud(caso.getLongitud());
+			casoDto.setAltitud(caso.getAltitud());
+			casoDto.setVisible(caso.getVisible());
+			casoDto.setDescripcion(caso.getDescripcion());
+			casoDto.setUrlMap(caso.getUrlMap());
+			casoDto.setRmiUrl(caso.getRmiUrl());
+			casoDto.setUsuarioId(caso.getUsuario().getId());
+			casoDto.setNombre(caso.getUsuario().getNombre());
+			casoDto.setImage(caso.getUsuario().getImage());
+			casosDto.add(casoDto);
+		}
+		return casosDto;
 	}
 
 	@Override
