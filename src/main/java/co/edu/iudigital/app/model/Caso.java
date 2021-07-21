@@ -35,6 +35,12 @@ public class Caso implements Serializable{
 	
 	private String descripcion;
 	
+	@Column(name = "url_map")
+	private String urlMap;
+	
+	@Column(name = "rmi_url")
+	private String rmiUrl;
+	
 	@ManyToOne
 	@JoinColumn(name = "usuarios_id")
 	private Usuario usuario;
@@ -145,6 +151,31 @@ public class Caso implements Serializable{
 		this.descripcion = descripcion;
 	}
 
+	
+	/**
+	 * @return the urlMap
+	 */
+	public String getUrlMap() {
+		return urlMap;
+	}
+	/**
+	 * @param urlMap the urlMap to set
+	 */
+	public void setUrlMap(String urlMap) {
+		this.urlMap = urlMap;
+	}
+	/**
+	 * @return the rmiUrl
+	 */
+	public String getRmiUrl() {
+		return rmiUrl;
+	}
+	/**
+	 * @param rmiUrl the rmiUrl to set
+	 */
+	public void setRmiUrl(String rmiUrl) {
+		this.rmiUrl = rmiUrl;
+	}
 	/**
 	 * @return the usuario
 	 */

@@ -32,8 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/casos")
-@CrossOrigin(origins = "*", 
-	methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @Api(value = "/casos", tags = {"Casos"})
 @SwaggerDefinition(tags = {
 		@Tag(name = "Casos", description = "Gestion API Casos")

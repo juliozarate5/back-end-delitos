@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/delitos")
-@CrossOrigin(origins = "*", 
-	methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @Api(value = "/delitos", tags = {"Delitos"})
 @SwaggerDefinition(tags = {
 		@Tag(name = "Delitos", description = "Gestion API Delitos")
@@ -73,6 +72,7 @@ public class DelitoController {
     @ApiOperation(value = "Realiza la creación de un delito",
             produces = "application/json",
             httpMethod = "POST")
+  //  @Secured({"ROLE_ADMIN"}) TODO: revisar creación por el admin
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Delito create(@Valid @RequestBody Delito delito) throws RestException{

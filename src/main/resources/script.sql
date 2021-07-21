@@ -36,10 +36,11 @@ CREATE TABLE IF NOT EXISTS `helpme_iud`.`usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(120) NOT NULL,
   `nombre` VARCHAR(120) NULL,
-  `password` VARCHAR(45) NULL,
+  `password` VARCHAR(250) NULL,
   `fecha_nacimiento` DATE NULL,
   `enabled` TINYINT NULL DEFAULT 1,
   `red_social` TINYINT NULL DEFAULT 0,
+  `image` TEXT NULL DEFAULT 'https://d500.epimg.net/cincodias/imagenes/2016/07/04/lifestyle/1467646262_522853_1467646344_noticia_normal.jpg',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username`))
 ENGINE = InnoDB;
@@ -94,8 +95,11 @@ CREATE TABLE IF NOT EXISTS `helpme_iud`.`casos` (
   `altitud` FLOAT NULL,
   `visible` TINYINT NULL DEFAULT 1,
   `descripcion` VARCHAR(200) NULL,
+  `url_map` text NULL,
+  `rmi_url` text NOT NULL,
   `usuarios_id` INT NOT NULL,
   `delitos_id` INT NOT NULL,
+ -- urlMap text NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_casos_usuarios1_idx` (`usuarios_id`),
   INDEX `fk_casos_delitos1_idx` (`delitos_id`),
@@ -117,6 +121,8 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 /*POBLACION TIPOS USUARIOS POR SUPERADMIN*/
+
+
 INSERT INTO roles (nombre,descripcion) 
 VALUES ('ROLE_ADMIN', 'administrador del sistema');
 
@@ -126,10 +132,10 @@ VALUES ('ROLE_USER', 'usuarios normales registran casos');
 /*POBLACION USUARIOS POR SUPERADMIN*/
 
 INSERT INTO usuarios (username,nombre,password,fecha_nacimiento,enabled,red_social)
-VALUES ('julio.martinez@iudigital.edu.co','julio martinez','$2a$10$kbhP/Mqo3JpoYTCtzhccXOPVi/9MekhI3HrNsI78FivjBD2iXtDhe','1985-08-05',1,0);
+VALUES ('julio.martinez@iudigital.edu.co','julio martinez','$2a$10$0jNu9vqe.hgUnr9Gea4qbOyXvG8sMNv.V.T5yuw5OZ0oh/n57jDfS','1985-08-05',1,0);
 
 INSERT INTO usuarios (username,nombre,password,fecha_nacimiento,enabled,red_social)
-VALUES ('caro.velasquez8@gmail.com','julio martinez','$2a$10$bwcbu9IMVhg/ElyvGooD9.fh/IXV1Rr8bvhYNIQqFUJr.lZXGkQ/C','1985-08-05',1,0);
+VALUES ('caro.velasquez8@gmail.com','CAROLINA PULGARIN','$2a$10$vwPkNxv2Jz.B9caa/SXFX.QApgI3Ycx1m0/1UNl9OS1bT3w23B4OG','1985-08-05',1,0);
 
 
 INSERT INTO roles_usuarios (usuarios_id,roles_id)
@@ -138,3 +144,10 @@ INSERT INTO roles_usuarios (usuarios_id,roles_id)
 VALUES (1,2);
 INSERT INTO roles_usuarios (usuarios_id,roles_id)
 VALUES (2,2);
+
+/*population delitos*/
+INSERT INTO delitos(nombre,descripcion,usuarios_id)
+VALUES ('hurto', 'cuando se quitan pertenencias', 1);
+
+INSERT INTO delitos(nombre,descripcion,usuarios_id)
+VALUES ('acoso sexual', 'groserías a una persona', 1);
