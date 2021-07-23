@@ -15,16 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import co.edu.iudigital.app.dto.UsuarioDto;
 import co.edu.iudigital.app.exception.BadRequestException;
 import co.edu.iudigital.app.exception.ErrorDto;
 import co.edu.iudigital.app.exception.InternalServerErrorException;
@@ -65,7 +66,7 @@ public class UsuarioController {
         	if(usuario.getPassword() != null) {
         		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         	}
-            return this.usuarioService.save(usuario);
+            return usuarioService.save(usuario);
         }catch (BadRequestException ex){
             throw ex;
         }catch (Exception ex){
@@ -75,6 +76,16 @@ public class UsuarioController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
+    
+	/*@ApiOperation(value = "Obtiene usuario por username",
+			response = UsuarioDto.class,
+			produces = "application/json",
+			httpMethod = "GET")
+	@GetMapping("/usuario/{username}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Usuario show(@PathVariable String username) throws RestException {
+		return usuarioService.findByUsername(username);
+	}*/
     
 	@PostMapping("/upload")
 	public ResponseEntity<?> upload(@RequestParam("image") MultipartFile image, @RequestParam Long id) 

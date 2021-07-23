@@ -1,30 +1,23 @@
 package co.edu.iudigital.app.dto;
 
 import java.time.LocalDate;
-
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 import co.edu.iudigital.app.model.Role;
 
 public class UsuarioDto {
 	
 	private Long id;
-	
-	@NotEmpty(message = "Email requerido")
+
 	private String username;
-	
-	@NotEmpty(message = "Password requerido")
-	private String password;
 	
 	private LocalDate fechaNacimiento;
 	
-	@NotEmpty(message = "Nombre requerido")
 	private String nombre;
 	
 	private String image;
 	
-	@NotEmpty(message = "tipo usuario requerido")
-	private Role rol;
+	private List<String> roles;
 
 	/**
 	 * @return the id
@@ -41,21 +34,6 @@ public class UsuarioDto {
 	}
 
 	/**
-	 * @return the nombre
-	 */
-	public String getNombre() {
-		return nombre;
-	}
-
-	/**
-	 * @param nombre the nombre to set
-	 */
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	
-	/**
 	 * @return the username
 	 */
 	public String getUsername() {
@@ -67,20 +45,6 @@ public class UsuarioDto {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	/**
@@ -96,8 +60,20 @@ public class UsuarioDto {
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-	
-	
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+
+	/**
+	 * @param nombre the nombre to set
+	 */
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	/**
 	 * @return the image
@@ -114,31 +90,18 @@ public class UsuarioDto {
 	}
 
 	/**
-	 * @return the rol
+	 * @return the roles
 	 */
-	public Role getRol() {
-		return rol;
+	public List<String> getRoles() {
+		return roles;
 	}
 
 	/**
-	 * @param rol the rol to set
+	 * @param roles the roles to set
 	 */
-	public void setRol(Role rol) {
-		this.rol = rol;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
-
-	/**
-	 * @return the tipoUsuario
-	 */
-	public Role getTipoUsuario() {
-		return rol;
-	}
-
-	/**
-	 * @param tipoUsuario the tipoUsuario to set
-	 */
-	public void setTipoUsuario(Role rol) {
-		this.rol = rol;
-	}
+	
 	
 }

@@ -29,19 +29,26 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	// protección del lado de oath2
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()//se parte desde rutas más específicas a mas generales
-			.antMatchers(HttpMethod.GET, "/delitos").permitAll()
-			.antMatchers(HttpMethod.POST, "/usuarios").permitAll()
-			.antMatchers(HttpMethod.GET, "/casos", "/casos/caso/**").permitAll()
-			.antMatchers(HttpMethod.POST, "/usuarios/upload").hasAnyRole("USER", "ADMIN")
-			.antMatchers(HttpMethod.GET, "/uploads/img/**").hasAnyRole("USER", "ADMIN")
-			.antMatchers(HttpMethod.POST, "/delitos").hasAnyRole("ADMIN") //otra form es con @secured en el controller
-			.antMatchers(HttpMethod.DELETE, "/delitos/delito/**").hasRole("ADMIN")
+		http
+		.cors().configurationSource(corsConfigurationSource())
+		.and().authorizeRequests()
+		//se parte desde rutas más específicas a mas generales o genéricas
+		// urls abiertas sin autenticación ni autorización
+		// pero lo haremos más sencillo con anotaciones @Secured
+		.antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+		.antMatchers(HttpMethod.GET, "/delitos").permitAll()
+		.antMatchers(HttpMethod.GET, "/casos", "/casos/caso/**").permitAll()
+		// nivel 2: AUTORIZACIONES ESPECÍFICAS (SOBREESCRIBE LA GENÉRICA CORRESPONDIENTE)
+		.antMatchers(HttpMethod.GET, "/uploads/img/**").hasAnyRole("USER", "ADMIN")
+		.antMatchers(HttpMethod.POST, "/usuarios/upload").hasAnyRole("USER", "ADMIN")
+		.antMatchers(HttpMethod.DELETE, "/delitos/delito/{id}").hasRole("ADMIN")
+		// nivel 1: genéricas
+		.antMatchers(HttpMethod.POST, "/delitos").hasAnyRole("ADMIN")//otra forma es con @Secured en el controller
+		
 			//.antMatchers(HttpMethod.POST, "/employees").hasRole("ADMIN") or hasAnyRole
-			.anyRequest()
-			.authenticated()// las rutas no especificadas, serán para usuarios autenticados
-			.and().cors().configurationSource(corsConfigurationSource())
-			.and().httpBasic().disable();
+		.anyRequest()
+		.authenticated()// las rutas no especificadas, serán para usuarios autenticados
+		.and().httpBasic().disable();
 		
 	}
 	

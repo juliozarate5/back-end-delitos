@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +22,9 @@ import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.repository.IUsuarioRepository;
 import co.edu.iudigital.app.service.iface.IUsuarioService;
 import co.edu.iudigital.app.util.ConstUtil;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
-public class UsuarioService implements IUsuarioService{
+public class UsuarioService implements UserDetailsService, IUsuarioService{
 
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
@@ -67,5 +66,27 @@ public class UsuarioService implements IUsuarioService{
     	}
 		return usuarioRepository.save(usuario);
 	}
+
+	@Override
+	public Usuario findByUsername(String username) {
+		return usuarioRepository.findByUsername(username);
+	}
+
+	/*
+	@Override
+	public UsuarioDto findByUsername(String username) {
+    	UsuarioDto usuarioDto = new UsuarioDto();
+    	List<String> roles = new ArrayList<>();
+		Usuario usuario = usuarioRepository.findByUsername(username);
+		usuarioDto.setId(usuario.getId());
+		usuarioDto.setNombre(usuario.getNombre());
+		usuarioDto.setUsername(usuario.getUsername());
+		usuarioDto.setImage(usuario.getImage());
+		for(Role role: usuario.getRoles()) {
+			roles.add(role.getNombre());
+		}
+		usuarioDto.setRoles(roles);
+		return usuarioDto;
+	}*/
 	
 }
