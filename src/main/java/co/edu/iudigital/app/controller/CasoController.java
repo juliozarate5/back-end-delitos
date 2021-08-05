@@ -8,12 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +22,7 @@ import co.edu.iudigital.app.exception.InternalServerErrorException;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Caso;
 import co.edu.iudigital.app.service.iface.ICasoService;
+import co.edu.iudigital.app.service.iface.IEmailService;
 import co.edu.iudigital.app.util.ConstUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +43,7 @@ public class CasoController {
 	
 	@Autowired
 	private ICasoService casoService;
+	
 	
 	@ApiOperation(value = "Obtiene todos casos",
 			response = Caso.class,

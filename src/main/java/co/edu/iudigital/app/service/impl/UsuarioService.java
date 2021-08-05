@@ -3,6 +3,8 @@ package co.edu.iudigital.app.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,12 +22,15 @@ import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Role;
 import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.repository.IUsuarioRepository;
+import co.edu.iudigital.app.service.iface.IEmailService;
 import co.edu.iudigital.app.service.iface.IUsuarioService;
 import co.edu.iudigital.app.util.ConstUtil;
 
 @Service
 public class UsuarioService implements UserDetailsService, IUsuarioService{
 
+	private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
+	
 	@Autowired
 	private IUsuarioRepository usuarioRepository;
 	
@@ -34,7 +39,7 @@ public class UsuarioService implements UserDetailsService, IUsuarioService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Usuario usuario = usuarioRepository.findByUsername(username);
 		if(usuario == null) {
-			//log.error("Error de login, no existe usuario: "+ email);
+			log.error("Error de login, no existe usuario: "+ usuario);
 			throw new UsernameNotFoundException("Error de login, no existe usuario: "+ username);
 		}
 		List<GrantedAuthority> authorities = new ArrayList<>();

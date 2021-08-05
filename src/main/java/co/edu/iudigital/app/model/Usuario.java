@@ -36,6 +36,9 @@ public class Usuario implements Serializable{
 	@NotEmpty(message = "Nombre obligatorio")
 	private String nombre;
 	
+	@NotEmpty(message = "Apellido obligatorio")
+	private String apellido;
+	
 	@NotEmpty(message = "Password obligatorio")
 	private String password;
 	
@@ -103,6 +106,22 @@ public class Usuario implements Serializable{
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+
+	/**
+	 * @return the apellido
+	 */
+	public String getApellido() {
+		return apellido;
+	}
+
+
+	/**
+	 * @param apellido the apellido to set
+	 */
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
 	}
 
 
