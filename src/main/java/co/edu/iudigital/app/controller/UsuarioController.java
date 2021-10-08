@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import co.edu.iudigital.app.exception.BadRequestException;
 import co.edu.iudigital.app.exception.ErrorDto;
 import co.edu.iudigital.app.exception.InternalServerErrorException;
-import co.edu.iudigital.app.exception.NotFoundException;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.service.iface.IEmailService;

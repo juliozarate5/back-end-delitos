@@ -35,8 +35,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `helpme_iud`.`usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(120) NOT NULL,
-  `nombre` VARCHAR(120) NULL,
-  `password` VARCHAR(250) NULL,
+  `nombre` VARCHAR(120) NOT NULL,
+  `apellido` VARCHAR(120) NULL,
+  `password` VARCHAR(250) NOT NULL,
   `fecha_nacimiento` DATE NULL,
   `enabled` TINYINT NULL DEFAULT 1,
   `red_social` TINYINT NULL DEFAULT 0,
@@ -131,11 +132,11 @@ VALUES ('ROLE_USER', 'usuarios normales registran casos');
 
 /*POBLACION USUARIOS POR SUPERADMIN*/
 
-INSERT INTO usuarios (username,nombre,password,fecha_nacimiento,enabled,red_social)
-VALUES ('julio.martinez@iudigital.edu.co','julio martinez','$2a$10$0jNu9vqe.hgUnr9Gea4qbOyXvG8sMNv.V.T5yuw5OZ0oh/n57jDfS','1985-08-05',1,0);
+INSERT INTO usuarios (username,nombre,apellido,password,fecha_nacimiento,enabled,red_social)
+VALUES ('julio.martinez@iudigital.edu.co','julio', 'martinez','$2a$10$0jNu9vqe.hgUnr9Gea4qbOyXvG8sMNv.V.T5yuw5OZ0oh/n57jDfS','1985-08-05',1,0);
 
-INSERT INTO usuarios (username,nombre,password,fecha_nacimiento,enabled,red_social)
-VALUES ('caro.velasquez8@gmail.com','CAROLINA PULGARIN','$2a$10$vwPkNxv2Jz.B9caa/SXFX.QApgI3Ycx1m0/1UNl9OS1bT3w23B4OG','1985-08-05',1,0);
+INSERT INTO usuarios (username,nombre,apellido,password,fecha_nacimiento,enabled,red_social)
+VALUES ('caro.velasquez8@gmail.com','CAROLINA', 'PULGARIN','$2a$10$vwPkNxv2Jz.B9caa/SXFX.QApgI3Ycx1m0/1UNl9OS1bT3w23B4OG','1985-08-05',1,0);
 
 
 INSERT INTO roles_usuarios (usuarios_id,roles_id)

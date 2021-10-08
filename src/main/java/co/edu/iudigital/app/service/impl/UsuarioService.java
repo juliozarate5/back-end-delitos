@@ -22,7 +22,6 @@ import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Role;
 import co.edu.iudigital.app.model.Usuario;
 import co.edu.iudigital.app.repository.IUsuarioRepository;
-import co.edu.iudigital.app.service.iface.IEmailService;
 import co.edu.iudigital.app.service.iface.IUsuarioService;
 import co.edu.iudigital.app.util.ConstUtil;
 
@@ -58,21 +57,29 @@ public class UsuarioService implements UserDetailsService, IUsuarioService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Usuario findById(Long id) throws RestException{
 		return usuarioRepository.findById(id).get();
 	}
 
 	@Override
+	@Transactional
 	public Usuario save(Usuario usuario) throws RestException{
     	if(usuario == null) {
     		throw new InternalServerErrorException(ErrorDto.getErrorDto(HttpStatus.BAD_REQUEST.getReasonPhrase(),
                     ConstUtil.MESSAGE_ERROR_DATA,
                     HttpStatus.INTERNAL_SERVER_ERROR.value()));
     	}
+    	List<Role> roles = new ArrayList<>();
+    	Role role = new Role();
+    	role.setId(2L);
+    	roles.add(role);
+    	usuario.setRoles(roles);
 		return usuarioRepository.save(usuario);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Usuario findByUsername(String username) {
 		return usuarioRepository.findByUsername(username);
 	}

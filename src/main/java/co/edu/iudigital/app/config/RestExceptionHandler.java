@@ -2,6 +2,11 @@ package co.edu.iudigital.app.config;
 
 import java.util.List;
 
+/** Interceptor que transforma errores en excepciones personalizadas
+ *  Tratamiento de las excepciones y las envuelve en un único Objeto
+ * @author Julio Martínez
+ */
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
