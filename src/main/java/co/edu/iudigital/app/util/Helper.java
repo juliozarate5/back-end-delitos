@@ -1,6 +1,7 @@
 package co.edu.iudigital.app.util;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import co.edu.iudigital.app.dto.UsuarioDto;
 import co.edu.iudigital.app.model.Usuario;
@@ -25,8 +26,34 @@ public interface Helper {
     }
 
     public static UsuarioDto getMapValuesClient(Usuario usuario){
-        UsuarioDto uDto = new UsuarioDto();
-        //uDto.setName(usuario.getName());
-        return uDto;
+    	UsuarioDto uDto = new UsuarioDto();
+    	uDto.setId(usuario.getId());
+    	uDto.setNombre(usuario.getNombre());
+    	uDto.setApellido(usuario.getApellido());
+    	uDto.setFechaNacimiento(usuario.getFechaNacimiento());
+    	uDto.setImage(usuario.getImage());
+    	uDto.setRoles(usuario.getRoles()
+    			.stream().map(r -> r.getNombre())
+    			.collect(Collectors.toList())
+    			);
+    	uDto.setUsername(usuario.getUsername());
+
+    	return uDto;
     }
+    
+    /*public static UsuarioDto toUsuarioDto(Usuario usuario) {
+    	UsuarioDto uDto = new UsuarioDto();
+    	uDto.setId(usuario.getId());
+    	uDto.setNombre(usuario.getNombre());
+    	uDto.setApellido(usuario.getApellido());
+    	uDto.setFechaNacimiento(usuario.getFechaNacimiento());
+    	uDto.setImage(usuario.getImage());
+    	uDto.setRoles(usuario.getRoles()
+    			.stream().map(r -> r.getNombre())
+    			.collect(Collectors.toList())
+    			);
+    	uDto.setUsername(usuario.getUsername());
+
+    	return uDto;
+    }*/
 }

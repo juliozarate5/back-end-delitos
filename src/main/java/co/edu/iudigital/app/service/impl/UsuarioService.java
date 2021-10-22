@@ -52,8 +52,7 @@ public class UsuarioService implements UserDetailsService, IUsuarioService{
 
 	@Override
 	public List<Usuario> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Usuario>) usuarioRepository.findAll();
 	}
 
 	@Override
@@ -70,6 +69,10 @@ public class UsuarioService implements UserDetailsService, IUsuarioService{
                     ConstUtil.MESSAGE_ERROR_DATA,
                     HttpStatus.INTERNAL_SERVER_ERROR.value()));
     	}
+		Boolean exists = usuarioRepository.existsById(usuario.getId());
+		if(exists) {
+			return usuarioRepository.save(usuario);
+		}
     	List<Role> roles = new ArrayList<>();
     	Role role = new Role();
     	role.setId(2L);

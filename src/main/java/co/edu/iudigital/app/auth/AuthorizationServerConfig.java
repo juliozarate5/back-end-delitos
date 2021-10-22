@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,30 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
+	
+	@Value("${security.jwt.client-service}")
+	private String client;
+	
+	@Value("${security.jwt.password-service}")
+	private String secret;
+	
+	@Value("${security.jwt.scope-read}")
+	private String read;
+	
+	@Value("${security.jwt.scope-write}")
+	private String write;
+	
+	@Value("${security.jwt.grant-password}")
+	private String grantPassword;
+	
+	@Value("${security.jwt.grant-refresh}")
+	private String grantRefresh;
+	
+	@Value("${security.jwt.token-validity-seconds}")
+	private Integer accessTime;
+	
+	@Value("${security.jwt.refresh-validity-seconds}")
+	private Integer refreshTime;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -40,18 +65,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	// ruta de login debe ser publica (servicio de autenticación)
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.tokenKeyAccess("permitAll()")//usuarios anónimos o no
+		security.passwordEncoder(passwordEncoder).tokenKeyAccess("permitAll()")//usuarios anónimos o no
 				.checkTokenAccess("isAuthenticated()");//permiso a endpoint que valida token
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("reactapp")
-		.secret(passwordEncoder.encode("123456"))
-		.scopes("read", "write")
-		.authorizedGrantTypes("password", "refresh_token")
-		.accessTokenValiditySeconds(3600)
-		.refreshTokenValiditySeconds(3600);
+		clients
+		.inMemory().withClient(client)
+		.secret(passwordEncoder.encode(secret))
+		.scopes(read, write)
+		.authorizedGrantTypes(grantPassword, grantRefresh)
+		.accessTokenValiditySeconds(accessTime)
+		.refreshTokenValiditySeconds(refreshTime);
 	}
 
 	@Override
@@ -72,6 +98,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+		jwtAccessTokenConverter.setSigningKey(JwtConfig.RSA_PRIVATE);
+		jwtAccessTokenConverter.setVerifierKey(JwtConfig.RSA_PUBLIC);
 		return new JwtAccessTokenConverter();
 	}
 }

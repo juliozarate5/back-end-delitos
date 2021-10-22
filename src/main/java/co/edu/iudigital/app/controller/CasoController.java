@@ -2,8 +2,6 @@ package co.edu.iudigital.app.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import co.edu.iudigital.app.exception.InternalServerErrorException;
 import co.edu.iudigital.app.exception.RestException;
 import co.edu.iudigital.app.model.Caso;
 import co.edu.iudigital.app.service.iface.ICasoService;
-import co.edu.iudigital.app.service.iface.IEmailService;
 import co.edu.iudigital.app.util.ConstUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,7 +58,8 @@ public class CasoController {
             httpMethod = "POST")
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Caso create(@Valid @RequestBody Caso caso) throws RestException{
+    //@Secured({"ROLE_ADMIN", "ROLE_USER"})
+    public Caso create(@RequestBody Caso caso) throws RestException{
         try {
             return casoService.save(caso);
         }catch (BadRequestException ex){
