@@ -71,7 +71,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		
 	}
 	
-	
+	//---------------------------- 2--------------------
+	/**
+	 * Configuración de los cors
+	 * cors: croised 
+	 * El Intercambio de Recursos de Origen Cruzado (CORS (en-US)) 
+	 * es un mecanismo que utiliza cabeceras HTTP adicionales para 
+	 * permitir que un user agent (en-US) obtenga permiso para acceder 
+	 * a recursos seleccionados desde un servidor, en un origen distinto 
+	 * (dominio) al que pertenece.
+	 * @return
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();

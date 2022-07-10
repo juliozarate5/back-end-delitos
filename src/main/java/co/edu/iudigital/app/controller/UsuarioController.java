@@ -224,7 +224,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Deshabilita usuario por id",
 			response = UsuarioDto.class,
 			produces = "application/json",
-			httpMethod = "GET")
+			httpMethod = "put")
 	@PutMapping("/usuario/{id}")
 	//@ResponseStatus(code = HttpStatus.OK)
 	@Secured({"ROLE_ADMIN"})

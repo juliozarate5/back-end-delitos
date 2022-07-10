@@ -19,6 +19,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 /**
  * proceso de autenticación por OAuth2: login, etc.
+ * todo lo relacionado con el login, autenticación con oauth2, creación del token
+ * validación del token, toda esa parte
  * @author JULIOCESARMARTINEZ
  *
  */
@@ -50,57 +52,102 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Value("${security.jwt.refresh-validity-seconds}")
 	private Integer refreshTime;
 
+	// en la clase de spring security config lo creamos como un bean
+	// entonces podemos usarlo e inyectarlo aqui o cualquier lado
+	// igual como lo inyectamos en el main para encriptar las contraseñas
+	// aleatorias
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
+	// el que configuramos en el spring security config
+	// lo inyectamos aqui con todo aquellso cque configuramos allá en la configuracion
+	// del spring security , con lo del userdetailsservice, usuarios, roles, etc.
+	// para que este servidor de autorización lo pueda usar para lo que es
+	// el proceso de login
 	@Autowired
-	@Qualifier("authenticationManager")
+	@Qualifier("authenticationManager")// para asegurarnos de usar el que configuramos en el spring securitu cpnfig
 	private AuthenticationManager authenticationManager;
 	
+	
+	// despues
 	@Autowired
 	private TokenMoreInfo tokenMoreInfo;
-
-	// se implementan los 3 métodos de config.
 	
+
+	// se implementan los 3 métodos de configuración
+	
+	/**
+	 * Primero configuramos el endpoint de autorización
+	 * este lo que hace es realizar todo ese proceso de autenticación y también
+	 * valida el token y firma, todo ese proceso
+	 * +
+	 */
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		//registramos la info adiciona con la creación del 
+		// --------2---------------------
+		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();//unimos la info del token por default y la nueva
+		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenMoreInfo, accessTokenConverter()));//agregamos ambas
+		//-------1
+		endpoints.authenticationManager(authenticationManager)// registramos el autenticationManager//--- 1
+				.tokenStore(tokenStore())//opcional pero lo hacemos explicitamente --- 2
+				.accessTokenConverter(accessTokenConverter())// registramos el accesstokenconverter y creamos el método
+				// el cual manipula varias cosas relacionadas con el token, por ejemplo, almecenamiento de datos
+				// de autenticación del usuario: roles, usuario, etc u otra información, recuerden que el token
+				// tiene información del usuario, por lo cual no debemos en el almacenar en él información sensible
+				// porque llega alguien, lo tiene, y lo descifra, como por ejemplo jwt.io
+				// este elemento traduce los valores del token codificados, verifica validez del token //--- 1
+				.tokenEnhancer(tokenEnhancerChain);//
+	}
+	
+	/*permisos para rutas de acceso*/
 	// ruta de login debe ser publica (servicio de autenticación)
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.passwordEncoder(passwordEncoder).tokenKeyAccess("permitAll()")//usuarios anónimos o no
-				.checkTokenAccess("isAuthenticated()");//permiso a endpoint que valida token
+		security
+		.passwordEncoder(passwordEncoder)//---- 2
+		.tokenKeyAccess("permitAll()")//permisos usuarios anónimos o no //---1
+				.checkTokenAccess("isAuthenticated()");//chequea o valida el token; permiso a endpoint que valida token
+		// acceden solo usuarios autenticados //------1
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients
-		.inMemory().withClient(client)
-		.secret(passwordEncoder.encode(secret))
-		.scopes(read, write)
-		.authorizedGrantTypes(grantPassword, grantRefresh)
-		.accessTokenValiditySeconds(accessTime)
-		.refreshTokenValiditySeconds(refreshTime);
+		.inMemory()// tipo de almacenamiento
+		.withClient(client)// creamos cliente
+		.secret(passwordEncoder.encode(secret))//contraseña y codificamos
+		.scopes(read, write)// scope: permisos que va tener la app
+		.authorizedGrantTypes(grantPassword, grantRefresh)//tipo de concesión del token, como se va a obtener (hay otros mas)
+		// refresh token obtiene token de acceso renovado y poder continuar en los recursos antes que caduque el token
+		.accessTokenValiditySeconds(accessTime)//tiempo de validez o cuando caduca
+		.refreshTokenValiditySeconds(refreshTime);// tiempo para el refresh token
+		// aqui puedes crear credenciales y demas parametros para más apps
 	}
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		//registramos la info adiciona con la creación del 
-		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();//unimos la info del token por default y la nueva
-		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenMoreInfo, accessTokenConverter()));//agregamos ambas
-		endpoints.authenticationManager(authenticationManager)
-				.tokenStore(tokenStore())//opcional
-				.accessTokenConverter(accessTokenConverter())
-				.tokenEnhancer(tokenEnhancerChain);
-	}
 
+	/**
+	 * se encarga de crear el token y almacenarlo
+	 * pero JWtAccess trabaja con el, entonces se pone opcional
+	 * pero lo hacemos explicitamente 
+	 * @return
+	 */
 	@Bean
 	public JwtTokenStore tokenStore() {
 		return new JwtTokenStore(accessTokenConverter());
 	}
 	
+	// ponemos de tipo de dato siempre la interface genérica
+	// retorna un bean
+	// traduce la información del token
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
-		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-		jwtAccessTokenConverter.setSigningKey(JwtConfig.RSA_PRIVATE);
+		//*-----1 
+		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();// por defacto tiene un token storag
+		//------ 2-------------------------
+		jwtAccessTokenConverter.setSigningKey(JwtConfig.RSA_PRIVATE);// clave secreta
 		jwtAccessTokenConverter.setVerifierKey(JwtConfig.RSA_PUBLIC);
-		return new JwtAccessTokenConverter();
+		//------ 1
+		return new JwtAccessTokenConverter();// crea un
 	}
 }

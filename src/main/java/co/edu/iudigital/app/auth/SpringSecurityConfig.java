@@ -34,29 +34,43 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		return new BCryptPasswordEncoder();
 	}
 	
+	/*
+	 * registramos el UserDatailService y paramos el atributo
+	 * y configuramos el passwordencoder y pasamos una instancia de 
+	 * la implementación de un encriptador de contraseña para brindar
+	 * más seguridad a las contraseñas, usamos el que creamos de Spring security
+	 * LE pasamos el método creado: passwordEnconder()
+	 * */
 	@Override
-	@Autowired
+	@Autowired // para inyectar vía argumento el auth
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 		auth.userDetailsService(this.usuarioService).passwordEncoder(passwordEncoder());
 	}
 	
-	@Bean("authenticationManager")
+	/**
+	 * Lo coloicamos como beans para usarlo en el servidor de autorización
+	 * */
+	@Bean("authenticationManager")// le colocamos esto para que el qyue inyectemos sea de este y no de otro
+	// osea para el qualifier
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
 	
+	
+	
+	////--------------------------------------2 ---------------------------
 	// protección del lado de spring
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/swagger-ui.html").permitAll()
+			.antMatchers("**/swagger-ui.html").permitAll()
 			
 			.anyRequest().authenticated()
 			.and()
 			.csrf().disable()//sin proteccion de forms ataques cross por estar en capa react separado del back
 			
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
 			
 			//.and()
 			//.httpBasic().realmName("HelmeIUD")

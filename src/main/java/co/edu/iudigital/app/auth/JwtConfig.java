@@ -2,6 +2,26 @@ package co.edu.iudigital.app.auth;
 
 public class JwtConfig {
 	
+	 // se debe asignar una llave secreta para firmar y verificar la integridad del JWT
+	
+	// sino hay un código o llave secreto se crea uno por defecto (se puede ver en JwtAccessTokenConverter)
+	
+	//Para generar estas llaves se usa openssl y se colocan en AuthorizationServer
+	
+	// usamos el algoritmo RSA
+	// con la privada se firma el token
+	// con la llave pública se verifica que el token sea válido
+	// y no se haya alterado o modificado
+	
+	// Hay varias herramientas pero usamos openssl
+	// openssl genrsa -out jwt.pem -> para generar
+    // openssl rsa -in jwt.pem -> para mostrar
+	// openssl rsa -in jwt.pem -pubout -> para mostrar llave pública
+	
+	// estas llaves cifran y verifican el token
+	
+	// en jwt.io podemos leer el token
+	
 	public static final String RSA_PUBLIC = "-----BEGIN PUBLIC KEY-----\r\n" + 
 			"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoM1WizAe1hDjwYvGAT+T\r\n" + 
 			"47QxeNxIaw3m7Tay/aD2qFgHV93jDwAWqsd1jzSyemBmt7zP00TElNTbZthm+p5T\r\n" + 
