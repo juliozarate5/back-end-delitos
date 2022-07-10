@@ -86,8 +86,11 @@ public class UsuarioController {
         	if(usuario.getPassword() != null) {
         		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         	}
-        	emailService.sendEmail(mensaje, usuario.getUsername(), asunto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
+        	Usuario usuarioSaved = usuarioService.save(usuario);
+        	if(usuarioSaved != null) {
+        		emailService.sendEmail(mensaje, usuario.getUsername(), asunto);
+        	}
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSaved);
         }catch (BadRequestException ex){
             throw ex;
         }catch (Exception ex){
@@ -150,6 +153,9 @@ public class UsuarioController {
 		return ResponseEntity.ok().body(usuarioDto);
 	}
 	
+    /*
+     * Sube la imagen de un usuario
+     */
 	@PostMapping("/upload")
 	public ResponseEntity<?> upload(
 			@RequestParam("image") MultipartFile image, 
@@ -242,6 +248,11 @@ public class UsuarioController {
 		return ResponseEntity.ok().body(response);
 	}
 	
+	/**
+	 * Obtiene la imagen de un usuario
+	 * @param name
+	 * @return
+	 */
 	//@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/uploads/img/{name:.+}")
 	public ResponseEntity<Resource> getImage(@PathVariable String name){

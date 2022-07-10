@@ -69,10 +69,12 @@ public class UsuarioService implements UserDetailsService, IUsuarioService{
                     ConstUtil.MESSAGE_ERROR_DATA,
                     HttpStatus.INTERNAL_SERVER_ERROR.value()));
     	}
-		Boolean exists = usuarioRepository.existsById(usuario.getId());
-		if(exists) {
-			return usuarioRepository.save(usuario);
-		}
+    	if(usuario.getId() != null) {
+    		Boolean exists = usuarioRepository.existsById(usuario.getId());
+    		if(exists) {
+    			return usuarioRepository.save(usuario);
+    		}
+    	}
     	List<Role> roles = new ArrayList<>();
     	Role role = new Role();
     	role.setId(2L);
